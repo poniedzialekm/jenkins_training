@@ -1,7 +1,7 @@
 pipeline {
     agent any
     parameters {
-        string value: '2.0', name: 'Maven version'
+        string defaultValue: '2.0', name: 'Maven version'
     }
     stages {
         stage("Check maven version"){
