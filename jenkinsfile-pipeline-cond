@@ -1,0 +1,30 @@
+pipeline {
+    agent any
+    options {
+        timestamps()
+    }
+    parameters{
+        choice (name: 'env', choices:['DEMO', 'PROD'])
+    }    
+    stages {
+        stage('Deploy on DEMO'){
+            when {environment name: 'env', value: 'DEMO'
+			}
+			steps {
+                echo "Deployment on $env"
+            }
+        }
+        stage('Stage bez warunku'){
+            steps {
+				script {
+				if (params.env =="DEMO") {
+					echo "Deploying on DEMO"
+					}
+				else if (params.env =="PROD") {
+					echo "Deploying on PROD"
+					}	
+            }
+           } 
+        }
+    }
+}
