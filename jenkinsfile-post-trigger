@@ -1,17 +1,23 @@
 pipeline {
-    agent none
+    agent any
+    parameters {
+        string value: '2.0', name: 'Maven version'
+    }
     stages {
         stage("Check maven version"){
             steps {
-            sleep 15
+                sleep 15
                 echo 'Check Maven version'
                 sh 'exit 1'
             }
         }
      post{
       failure
-      biuld job: 'declarative-pipeline-post-B-marta', parameters: [
-      string(name: 'Maven version', value: "2.0")]
-     }
-    }
+        stage("trigger downstream pipeline")
+            steps{
+                biuld job: 'declarative-pipeline-post-B-marta', parameters: [
+                string(name: 'Maven version', value: '2.0')]
+            }
+        }
+      }
    }
