@@ -1,0 +1,55 @@
+@Library('Marta_shared-library')_
+
+pipeline {
+    agent any
+    
+    options {
+        timestamps()
+    }
+    
+    parameters {
+        string(name: 'branch', defaultValue: 'master', description: 'branch to checkout')
+        string(name: 'gitUrl', defaultValue: 'git@gitlab.jenkins-training.eu:trening/scm-exercise.git', description: 'Git url to checkout')
+        string(name: 'fileName' ,description: 'Filename to commit' )
+        string(name: 'contentFile', description: 'Content of the filename')
+        string(name: 'commitMessage', description: 'Commit message')
+    }
+
+    stages {
+        stage("Checkout") {
+            steps {
+                script {
+                    scmUtils.gitCheckout(
+                        branch: params.branch,
+                        url: params.gitUrl,
+                        credentialsId: 'gitlab'
+                    )
+                }  
+            }
+        }
+        stage("Create file") {
+            steps {
+                sh "echo ${params.contentFile} > ${params.fileName} "
+            }
+        }
+
+        stage("Add to repository") {
+            steps {
+                script {
+
+                    scmUtils.setGitUserInfo(    
+                        email: "jenkins-deployer@official.com",
+                        username: "jenkins-deployer"
+                    )  
+
+                    scmUtils.gitCommit (params.commitMessage)
+                        
+                    scmUtils.gitPush(
+                        credentialsId: "gitlab", 
+                        branchName: params.branch)
+                    }
+                    
+                }
+            }
+        }
+}
