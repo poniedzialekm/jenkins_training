@@ -4,23 +4,23 @@ pipeline {
         timestamps()
     }
     parameters{
-        choice (name: 'env', choices:['DEMO', 'PROD'])
+        choice (name: 'ENVIRONMENT', choices:['TEST','DEMO', 'PROD'])
     }    
     stages {
         stage('Deploy on DEMO'){
-            when {environment name: 'env', value: 'DEMO'
+            when {environment name: 'ENVIRONMENT', value: 'DEMO'
 			}
 			steps {
-                echo "Deployment on $env"
+                echo "Deployment on DEMO"
             }
         }
         stage('Stage bez warunku'){
             steps {
 				script {
-				if (params.env =="DEMO") {
+				if (params.ENVIRONMENT =="DEMO") {
 					echo "Deploying on DEMO"
 					}
-				else if (params.env =="PROD") {
+				else if (params.ENVIRONMENT =="PROD") {
 					echo "Deploying on PROD"
 					}	
             }
