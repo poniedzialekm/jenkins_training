@@ -11,6 +11,6 @@ pipeline {
      post{
       failure
       biuld job: 'declarative-pipeline-post-B-marta', parameters: [
-      string(name: 'Maven version', value: "2.0')]
+      string(name: 'Maven version', value: "2.0")]
      }
     }
