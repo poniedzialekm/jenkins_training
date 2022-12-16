@@ -14,3 +14,4 @@ pipeline {
       string(name: 'Maven version', value: "2.0")]
      }
     }
+   }
