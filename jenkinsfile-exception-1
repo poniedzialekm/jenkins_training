@@ -1,0 +1,35 @@
+pipeline {
+      agent {
+        label "slave01"
+      }
+    stages {
+        stage("Pull image 1"){
+            steps {
+             script {
+                try {
+                  def image = docker.image('maven:3.3.3-jdk-8')
+                  image.pull()
+                }
+                catch (Exception e) {
+                   println "exception ${e}"
+                   println "Problem with pull image"
+                }   
+             }
+            } 
+        }
+        stage("Pull image 2"){
+            steps {
+                script {
+                  try {
+                    def image = docker.image('maven:non_existing')
+                    image.pull()
+                  }
+                  catch (Exception e) {
+                        println "exception ${e}"
+                        println "Problem with pull image"
+                        currentBuild.result = 'UNSTABLE'
+                  }
+                }
+            }  
+        }
+}  
